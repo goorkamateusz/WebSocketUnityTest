@@ -1,11 +1,15 @@
+using Services.Logic;
 using Services.WebSocketService;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddSingleton<IWebSocketService, WebSocketService>();
+builder.Services.AddSingleton<IBroadCastToAllService, BroadCastToAllService>();
 
 var app = builder.Build();
+
+app.Services.GetService<IBroadCastToAllService>();
 
 var webSocketOptions = new WebSocketOptions
 {

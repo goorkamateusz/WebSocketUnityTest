@@ -3,18 +3,11 @@ using System.Text;
 
 namespace Services.WebSocketService;
 
-public struct MessageToClient
-{
-    public string Message;
-
-    public MessageToClient(string message)
-    {
-        this.Message = message;
-    }
-}
-
 public class WebSocketHandler : IDisposable
 {
+    public event Action<WebSocketHandler> OnClosed;
+    public event Action<WebSocketHandler, string> OnMessage;
+
     private WebSocket socket;
 
     public WebSocketHandler(WebSocket socket)
@@ -36,17 +29,17 @@ public class WebSocketHandler : IDisposable
 
     private void OnConnected()
     {
-        Send("Are you new?");
     }
 
-    internal void OnMessage(byte[] buffer, int count)
+    internal void ProcessOnMessage(byte[] buffer, int count)
     {
         string message = Encoding.UTF8.GetString(buffer, 0, count);
-        Send($"Hi! Did you say '{message}'?");
+        OnMessage?.Invoke(this, message);
     }
 
-    internal void OnClosed()
+    internal void ProcessOnClosed()
     {
+        OnClosed?.Invoke(this);
     }
 
     public void Dispose()
