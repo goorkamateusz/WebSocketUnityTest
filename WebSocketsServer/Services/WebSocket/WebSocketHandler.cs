@@ -3,6 +3,7 @@ using System.Text;
 
 namespace Services.WebSocketService;
 
+#pragma warning disable CS8618
 public class WebSocketHandler : IDisposable
 {
     public event Action<WebSocketHandler> OnClosed;
@@ -37,7 +38,7 @@ public class WebSocketHandler : IDisposable
         OnMessage?.Invoke(this, message);
     }
 
-    internal void ProcessOnClosed()
+    internal void ProcessOnClosed(WebSocketCloseStatus closeStatus)
     {
         OnClosed?.Invoke(this);
     }

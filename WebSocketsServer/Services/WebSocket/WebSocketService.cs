@@ -9,6 +9,7 @@ public interface IWebSocketService
     Task ProcessWebSocket(WebSocket socket);
 }
 
+#pragma warning disable CS8618
 public class WebSocketService : IWebSocketService
 {
     public event Action<WebSocketHandler> OnNewSocketOpened;
@@ -27,7 +28,7 @@ public class WebSocketService : IWebSocketService
 
             if (socket.CloseStatus.HasValue)
             {
-                handler.ProcessOnClosed();
+                handler.ProcessOnClosed(socket.CloseStatus.Value);
                 break;
             }
 
